@@ -1,0 +1,9 @@
+web:
+  build: .
+  links:
+   - db
+  ports:
+   - "9080"
+db:
+  image: mongo
+
