@@ -1,9 +1,11 @@
-web:
-  build: .
-  links:
-   - db
-  ports:
-   - "9080"
-db:
-  image: mongo
+version: '2'
+services:
+  web:
+    build: .
+    links:
+      - db
+    ports:
+     - "9080"
+  db:
+    image: mongo
 
