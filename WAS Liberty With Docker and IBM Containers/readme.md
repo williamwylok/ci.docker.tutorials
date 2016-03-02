@@ -168,20 +168,25 @@ The first method is simply to mount an application or directory from the host wh
     ```bash
     $ cd app
     ```
-2. Use the following command to run a container with WebSphere Liberty:
+2. Run the following command to copy the sample Servlet App to your docker host VM:
 
     ```bash
-    $ docker run -d -p 80:9080 --name=app -v $(pwd)/ServletApp.war:/config/dropins/app.war websphere-liberty
+    $ docker-machine scp ServletApp.war $(docker-machine active):/tmp/ServletApp.war
+    ```
+3. Use the following command to run a container with WebSphere Liberty:
+
+    ```bash
+    $ docker run -d -p 80:9080 --name=app -v /tmp/ServletApp.war:/config/dropins/app.war websphere-liberty
     ```
 The important part of the command is the `-v` option which indicates that the ServletApp.war from the current directory (Docker requires an absolute path) should be mounted in to the dropins directory of the Liberty configuration.
-3. Use the following command to watch the server start:
+4. Use the following command to watch the server start:
 
     ```bash
     $ docker logs --tail=all -f app
     ```
 You should see log entries indicating that the application has been started.
-4. View it in a browser at `http://localhost/app`.
-5. Clean up the server with the following commands:
+5. View it in a browser at `http://localhost/app`.
+6. Clean up the server with the following commands:
 
     ```bash
     $ docker kill app
