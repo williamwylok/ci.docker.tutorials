@@ -9,6 +9,7 @@ Although Docker is being ported to other platforms, in its original form it runs
 ## Prerequisites:
 1. [Docker Toolbox](https://www.docker.com/products/docker-toolbox/) (1.10 or later) for Windows or Mac
 2. [Cloud Foundry CLI](http://docs.cloudfoundry.org/cf-cli/install-go-cli.html) and the [IBM Containers plug-in](https://console.ng.bluemix.net/docs/containers/container_cli_cfic.html)
+3. Download this repository onto your local machine
 
 To complete the final section of this lab you will also need an IBM ID registered with IBM Bluemix. If you do not have an IBM ID, or have not signed up for Bluemix, and wish to complete this section of the lab then sign up for a free 30-day trial at https://console.ng.bluemix.net/registration/.
 
