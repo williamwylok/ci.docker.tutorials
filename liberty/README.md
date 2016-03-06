@@ -28,7 +28,7 @@ The layers represent the commands that were issued when the image was built (spe
     ```bash
     $ docker run -i -t websphere-liberty
     ```
-6. The server isn't much use though as we didn�t expose any ports to access it. Type `Ctrl-C` to stop the server. (If you failed to specify the `-i -t` options then you will have to kill the process from another terminal.)
+6. The server isn't much use though as we didn't expose any ports to access it. Type `Ctrl-C` to stop the server. (If you failed to specify the `-i -t` options then you will have to kill the process from another terminal.)
 
 7. This time map the port 9080 from the container to port 80 on the host virtual machine:
 
