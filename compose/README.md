@@ -31,7 +31,7 @@ The important part to note is the <mongo> stanza that specifies that the hostnam
 4. Pull down MongoDB from Docker Hub to your local cache using the command:
 
     ```bash
-    $ docker pull mongodb
+    $ docker pull mongo
     ```
 5. Now start the MongoDB server using the following command:
 
@@ -60,7 +60,7 @@ The `--link` option indicates that the `mongodb` container should be made availa
 10. Clean up the containers and images with the following commands:
 
     ```bash
-    $ docker kill $(docker ps -aq)
+    $ docker kill $(docker ps -q)
     $ docker rm $(docker ps -aq)
     $ docker rmi app
     ```
