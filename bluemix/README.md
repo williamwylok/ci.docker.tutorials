@@ -4,70 +4,135 @@ In this tutorial you will take the same sample application used in the [Working 
 
 To complete this tutorial you will need an IBM ID registered with IBM Bluemix. If you do not have an IBM ID, or have not signed up for Bluemix, and wish to complete this section of the lab then sign up for a [free 30-day trial](https://console.ng.bluemix.net/registration/). You will then need the [Cloud Foundry CLI](http://docs.cloudfoundry.org/cf-cli/install-go-cli.html) with the [IBM Containers plug-in](https://console.ng.bluemix.net/docs/containers/container_cli_cfic.html) installed.
 
-1. Log in IBM Bluemix using the Cloud Foundry CLI. You will be prompted to provide your IBM ID and password.
+1. Log in IBM Bluemix with this command:
 
     ```bash
-    $ cf login -a https://api.ng.bluemix.net
+    $ bluemix login -sso https://api.ng.bluemix.net
     ```
-2. If you haven't use IBM Containers before, you need to specify a unique registry namespace to use with your account. In the following command, substitute a value for <namespace> that must be a combination of lower-case letters and numbers, and must start with a letter.
+
+You will then be prompted to get a one time authentication code at https://iam.ng.bluemix.net/oidc/passcode. Follow this link and type the passcode on screen into the terminal.
+
+Then select the account you want to log on with.
+
+2. If you haven't use IBM Containers before, you need to specify a unique registry namespace to use with your account. Firstly, you will need to install the container registry plugin if you haven't already, with this command:
 
     ```bash
-    $ cf ic namespace set <namespace>
+    $ bx plugin install container-registry -r Bluemix
     ```
-3. Initialize the IBM Containers plugin:
+
+After this, run this command to select the org:
 
     ```bash
-    $ cf ic init
+    $ bx target -cf
     ```
-Note: When the init command is run you will be presented with two options. Option one allows you to simultaneously manage IBM Containers and your local Docker host through 'cf ic' commands. Option two uses the Docker CLI, overriding the local Docker environment to connect to IBM Containers. This tutorial will use the first option.  
-4. Copy the MongoDB Docker Hub image to your private registry, remembering to insert your namespace.
+
+From there, use this command to add a namespace to create your own image repository. Replace <my_namespace> with your chosen namespace.
 
     ```bash
-    $ cf ic cpi mongo registry.ng.bluemix.net/<namespace>/mongo
+    $ bx cr namespace-add <my_namespace>
     ```
-5. Run an instance of the Mongo image that you just copied across called mongodb
+
+If you are not sure if you already have a namespace, use this to list the current namspaces you have created.
 
     ```bash
-    $ cf ic run -d --name mongodb registry.ng.bluemix.net/<namespace>/mongo
+    $ bx cr namespace-list
     ```
-6. Change to the `bluemix` directory containing this README.
+
+3. Log your local Docker daemon into the IBM Bluemix Container Registry:
+
+    ```bash
+    $ bx cr login
+    ```
+
+4. Change to the `bluemix` directory containing this README.
 
     ```bash
     $ cd bluemix
     ```
-7. Look at the Dockerfile that will be used to build the application image using the following command. Notice the base image being used is the `ibmliberty` image that is published in the IBM Containers registry.
+
+5. Build the docker image from the Dockerfile in this directory
+
+    ```bash
+    $ docker build -t mongotest .
+    ```
+
+6. Tag the image with the destination we will be pushing to (your private registry).
+
+    ```bash
+    docker tag mongotest registry.ng.bluemix.net/<my_namespace>/mongo-private-registry:latest
+    ```
+
+7. Push the image, where <my_namespace> is the namespace you created earlier in this tutorial.
+
+    ```bash
+    docker push registry.ng.bluemix.net/<my_namespace>/mongo-private-registry:latest
+    ```
+
+8. Verify your image is in your private registry.
+
+    ```bash
+    bx cr image-list
+    ```
+
+9. Look at the Dockerfile that will be used to build the application image using the following command. Notice the base image being used is the `ibmliberty` image that is published in the IBM Containers registry.
 
     ```bash
     $ cat Dockerfile
     ```
-8. Build the app in IBM Containers, remembering to insert your namespace once again:
+
+In order to make the image into a container and deploy it on bluemix, you will need to create a kubernetes cluster with bluemix.
+
+10. In the top right corner of console.bluemix.net , go to Catalog > Containers > Kubernetes cluster.
+
+11. Select standard for the cluster type and create the cluster.
+
+12. Afterwards, initialise the cluster with your CLI, using this command (US South is used in this demo, but other regions can be used by changing the url after host):
 
     ```bash
-    $ cf ic build -t registry.ng.bluemix.net/<namespace>/app .
+    $ bx cs init --host https://eu-central.containers.bluemix.net
     ```
-9. Run the app that you just built, linking the mongodb container.
+
+13. List all of the clusters to check that your cluster is working and available.
 
     ```bash
-    $ cf ic run -d --link mongodb:db -p 80:9080 --name app registry.ng.bluemix.net/<namespace>/app
+    $ bx cs clusters
     ```
-10. Check all the containers are up and running:
+
+14. Set the cluster you created as the context for this session. Complete these configuration steps every time that you work with your cluster.
+
+    1. Get the command to set the environment variable and download the Kubernetes configuration files.
+
+        ```bash
+        $ bx cs cluster-config <cluster_name_or_id>
+        ```
+
+    2. After downloading the configuration files, a command is displayed that you can use to set the path to the local Kubernetes configuration file as an environment variable. Copy and paste the command that is displayed in your terminal to set the KUBECONFIG environment variable.
+
+    3. Verify that the KUBECONFIG environment variable is set properly.
+
+        ```bash
+        $ echo $KUBECONFIG
+        ```
+
+        Output:
+
+        /Users/<user_name>/.bluemix/plugins/container-service/clusters/<cluster_name>/kube-config-prod-dal10-<cluster_name>.yml
+
+15. After this, verify that kubectl runs properly with your cluster by entering this command. A client and server version should appear if configured correctly.
 
     ```bash
-    $ cf ic ps
+    $ kubectl version --short
     ```
-11. Access the application using the allocated IP address.
+
+16. Now to deploy the app, use this command to run the configuration script included in this directory to the cluster's context.
 
     ```bash
-    $ curl $(cf ic port app 9080)/mongoDBApp
+    $ kubectl apply -f <deployment script location>
     ```
-10. Clean up the containers and images with the following commands:
 
-    ```bash
-    $ cf ic kill $(cf ic ps -aq)
-    $ cf ic rm $(cf ic ps -aq)
-    $ cf ic rmi registry.ng.bluemix.net/<namespace>/app
-    $ cf ic rmi registry.ng.bluemix.net/<namespace>/mongo
-    ```
+When writing the deployment script, ensure that the node port is set in the service, and that the app name for the service and deployment are the same. Use the registry.ng.bluemix.net/<my_namespace>/<image_name>:<image_tag> set earlier in the containers image link. 
+
+17. Go to the public IP found for your cluster in the bluemix containers dashboard, append the port number on the end of the IP and verify that the service works as intended.
 
 ## Congratulations
 

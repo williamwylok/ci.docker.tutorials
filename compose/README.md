@@ -6,6 +6,7 @@ Another usage pattern for Docker is to package not only the application, but als
 You'll begin by using Docker linking to allow the Liberty application to resolve the MongoDB instance.
 
 1. Create an image with WebSphere Liberty and the MongoDB feature as follows.
+
  1. Switch to the `compose` directory containing this README by typing:
 
     ```bash
@@ -17,12 +18,14 @@ You'll begin by using Docker linking to allow the Liberty application to resolve
     $ cat Dockerfile
     ```
 The file adds the Liberty mongodb-2.0 feature from the Liberty online repository using the `installUtility` command and then copies in the server configuration.
+
 2. View the server.xml by running:
 
     ```bash
     $ cat mongoDBSample/server.xml
     ```
 The important part to note is the <mongo> stanza that specifies that the hostname should be `db`.
+
 3. Build the application with the command:
 
     ```bash
@@ -44,17 +47,19 @@ The important part to note is the <mongo> stanza that specifies that the hostnam
     $ docker run -d --link mongodb:db -p 80:9080 --name app app
     ```
 The `--link` option indicates that the `mongodb` container should be made available to this container under the alias `db`.
+
 7. Use the following command to wait for the server to start:
 
     ```bash
     $ docker logs --tail=all -f app
     ```
 
-8. Run the following Docker Machine command to identify the IP address allocated to the current active virtual machine:
+8. Use this docker command to check the IP address the server is on, similar to the "Adding an Application" Tutorial:
 
     ```bash
-    $ docker-machine ip $(docker-machine active)
+    $ docker ps
     ```
+
 9. View the running application by opening a web browser at this IP address followed by `/mongoDBApp`. Each time the page is refreshed it writes more users in to the MongoDB base.
 
 10. Clean up the containers and images with the following commands:
@@ -79,6 +84,7 @@ Docker Compose provides a simple file format to define the relationship between 
     $ cat docker-compose.yml
     ```
 Note that it defines two services: web and db and links them together.
+
 2. Start the application with the following command (as with the `docker` command, the `-d` option starts the containers in the background):
 
     ```bash
@@ -90,6 +96,7 @@ Note that it defines two services: web and db and links them together.
     $ docker-compose logs
     ```
 4. `Ctrl-C` to exit the logs view.
+
 5. You can scale up the number of containers for the web service using the command:
 
     ```bash
