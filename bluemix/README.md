@@ -20,19 +20,19 @@ Then select the account you want to log on with.
     $ bx plugin install container-registry -r Bluemix
     ```
 
-2. (b) After this, run this command to select the org:
+2. After this, run this command to select the org:
 
     ```bash
     $ bx target -cf
     ```
 
-2. (c) From there, use this command to add a namespace to create your own image repository. Replace <my_namespace> with your chosen namespace.
+2. From there, use this command to add a namespace to create your own image repository. Replace <my_namespace> with your chosen namespace.
 
     ```bash
     $ bx cr namespace-add <my_namespace>
     ```
 
-2. (d) If you are not sure if you already have a namespace, use this to list the current namspaces you have created.
+2. If you are not sure if you already have a namespace, use this to list the current namspaces you have created.
 
     ```bash
     $ bx cr namespace-list

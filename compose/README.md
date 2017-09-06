@@ -113,7 +113,7 @@ Note that it defines two services: web and db and links them together.
     $ curl $(docker-compose port --index=1 web 9080)/mongoDBApp
     $ curl $(docker-compose port --index=2 web 9080)/mongoDBApp
     ```
-7. (b) You should see that the two application instances are serving data from the same MongoDB database with the second command returning the users created by the first command plus ten more.
+7. You should see that the two application instances are serving data from the same MongoDB database with the second command returning the users created by the first command plus ten more.
 
     ```bash
     $ docker-compose ps
