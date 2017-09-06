@@ -118,6 +118,7 @@ You should see that the two application instances are serving data from the same
     ```bash
     $ docker-compose ps
     ```
+
 8. Clean up the containers with the following commands:
 
     ```bash
