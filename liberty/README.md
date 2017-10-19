@@ -10,13 +10,14 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
     ```bash
     $ docker pull websphere-liberty
     ```
-This will pull down the layers that make up the image. The total image size, including the base Ubuntu image on which it builds, is just over 500MB.
+   
+   This will pull down the layers that make up the image. The total image size, including the base Ubuntu image on which it builds, is just over 500MB.
 3. Execute the following command to see the layers that make up the Liberty image:
 
     ```bash
     $ docker history websphere-liberty
     ```
-The layers represent the commands that were issued when the image was built (specify the --no-trunc option if you want to see the full commands). The bottom layers represent the `ubuntu` image. After setting the maintainer and installing wget and unzip, the Dockerfile downloads and installs an IBM JRE and the WebSphere Liberty kernel. It then creates a server and then sets the metadata around the image such as the ports to expose and the command to run. It then adds additional features using the `installUtility` command to build up to the full set of Java EE7 features.
+    The layers represent the commands that were issued when the image was built (specify the --no-trunc option if you want to see the full commands). The bottom layers represent the `ubuntu` image. After setting the maintainer and installing wget and unzip, the Dockerfile downloads and installs an IBM JRE and the WebSphere Liberty kernel. It then creates a server and then sets the metadata around the image such as the ports to expose and the command to run. It then adds additional features using the `installUtility` command to build up to the full set of Java EE7 features.
 
 4. You can see the total size of the image by running the command:
 
@@ -35,13 +36,13 @@ The layers represent the commands that were issued when the image was built (spe
     ```bash
     $ docker run -d -p 80:9080 --name wlp websphere-liberty
     ```
-Note that this time you have specified the `-d` option to run the container in the background, and we have given it a name so that we can subsequently refer to it by this name rather than using the generated name or id.
+   Note that this time you have specified the `-d` option to run the container in the background, and we have given it a name so that we can subsequently refer to it by this name rather than using the generated name or id.
 8. Use the following command to follow the logs of the container as it starts up:
 
     ```bash
     $ docker logs --tail=all -f wlp
     ```
-Once the server is ready to run, type `Ctrl-C` to return to the command prompt.
+    Once the server is ready to run, type `Ctrl-C` to return to the command prompt.
 9. Run the following Docker Machine command to identify the IP address allocated to the current active virtual machine:
 
     ```bash
@@ -53,7 +54,7 @@ Once the server is ready to run, type `Ctrl-C` to return to the command prompt.
     ```bash
     $ docker top wlp
     ```
-You will see the `server` script and the child Java process.
+    You will see the `server` script and the child Java process.
 12. If you execute the following commands, you can see that these processes can also be seen at the level of the Docker host. They are normal Linux processes whose visibility of the rest of the host are constrained by the use of Linux namespaces.
 
     ```bash
@@ -62,40 +63,42 @@ You will see the `server` script and the child Java process.
     $ exit
     ```
 13. Docker permits us to run other processes inside the namespaces of an existing container. This is primarily used for diagnostic purposes.
-  1. For example, type the following command to start an interactive session inside the running container:
 
-    ```bash
-    $ docker exec -it wlp bash
-    ```
-You will see the command prompt change indicating that you are now running as the root user within the container.
-  2. Execute the following command to show all of the processes running within the container namespace.
+    1. For example, type the following command to start an interactive session inside the running container:
+        ```bash
+        $ docker exec -it wlp bash
+        ```
+        You will see the command prompt change indicating that you are now running as the root user within the container.
+    2. Execute the following command to show all of the processes running within the container namespace.
 
-    ```bash
-    $ ps aux
-    ```
-Note that within the container you do not have visibility of other processes running on the host.
-  3. Execute the following command inside the container to view the contents of the server log file:
+        ```bash
+        $ ps aux
+        ```
+        Note that within the container you do not have visibility of other processes running on the host.
+    3. Execute the following command inside the container to view the contents of the server log file:
 
-    ```bash
-    $ cat /logs/messages.log
-    ```
-  4. Enter the following command to end the terminal session. The container will continue to run.
+        ```bash
+        $ cat /logs/messages.log
+        ```
+    4. Enter the following command to end the terminal session. The container will continue to run.
 
-    ```bash
-    $ exit
-    ```
+        ```bash
+        $ exit
+        ```
 14. It is also possible to copy files out of the container.
- 1. For example type the following command to copy the messages.log file from the container `wlp` to the current directory:
 
-    ```bash
-    $ docker cp wlp:/logs/messages.log .
-    ```
- 2. Then run execute the following command to view the file:
+    1. For example type the following command to copy the messages.log file from the container `wlp` to the current directory:
 
-    ```bash
-    $ cat messages.log
-    ```
-14. Finally, run the following commands to clear up the container:
+        ```bash
+        $ docker cp wlp:/logs/messages.log .
+        ```
+      
+    2. Then run execute the following command to view the file:
+
+        ```bash
+        $ cat messages.log
+        ```
+15. Finally, run the following commands to clear up the container:
 
     ```bash
     $ docker stop wlp
@@ -110,7 +113,7 @@ Explicitly setting ports and names is fine if you only have a single container b
     ```bash
     $ C=$(docker run -d -P websphere-liberty)
     ```
-This time you have specified the `-P` flag to indicate that Docker should automatically select ports on the host to map those exposed by the image to. You have also saved the identifier for the new container in the variable `$C`.
+    This time you have specified the `-P` flag to indicate that Docker should automatically select ports on the host to map those exposed by the image to. You have also saved the identifier for the new container in the variable `$C`.
 2. Run the following command to see the ports on the host that Docker has mapped 9080 and 9443 to:
 
     ```bash
@@ -141,7 +144,7 @@ This time you have specified the `-P` flag to indicate that Docker should automa
     ```bash
     $ docker stats $C $D
     ```
-Note that, having not expressed any constraints, each container has the full memory allocated to virtual machine available to it.
+    Note that, having not expressed any constraints, each container has the full memory allocated to virtual machine available to it.
 8. Enter `Ctrl-C` to terminate the stats stream.
 9. Clean up the containers with the following commands:
 
