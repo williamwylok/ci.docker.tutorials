@@ -14,28 +14,29 @@ The first method is simply to mount an application or directory from the host wh
     ```bash
     $ docker run -d -p 80:9080 --name=app -v /tmp/ServletApp.war:/config/dropins/app.war websphere-liberty
     ```
-The important part of the command is the `-v` option which indicates that the ServletApp.war from the directory on the Docker host should be mounted in to the `dropins` directory of the Liberty server configuration.
+    The important part of the command is the `-v` option which indicates that the ServletApp.war from the directory on the Docker host should be mounted in to the `dropins` directory of the Liberty server configuration.
 
 3. Use the following command to watch the server start:
 
     ```bash
     $ docker logs --tail=all -f app
     ```
-You should see log entries indicating that the application has been started.
+    You should see log entries indicating that the application has been started.
 
 4. Use this docker command to check the IP address the server is on:
 
     ```bash
     $ docker ps
     ```
-The output should look similar to this:
+    The output should look similar to this:
 
-CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                             NAMES
+    ```
+    CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                             NAMES
 
-aaefa5315ed2        websphere-liberty   "/opt/ibm/docker/d..."   About a minute ago   Up About a minute   9443/tcp, 0.0.0.0:80->9080/tcp   upbeat_fermi
+    aaefa5315ed2        websphere-liberty   "/opt/ibm/docker/d..."   About a minute ago   Up About a minute   9443/tcp, 0.0.0.0:80->9080/tcp   upbeat_fermi
+    ```
 
-
-The section under ports will provide the IP Address (0.0.0.0 in this scenario.)
+    The section under ports will provide the IP Address (0.0.0.0 in this scenario.)
 
 5. View the running application by opening a web browser at this IP address followed by '/app'.
 
@@ -54,7 +55,7 @@ The approach above is fine for development purposes, allowing you to rapidly upd
     ```bash
     $ cat Dockerfile
     ```
-It simply starts from the `websphere-liberty` image and adds the ServletApp.war from the current directory in to the `dropins` directory.
+    It simply starts from the `websphere-liberty` image and adds the ServletApp.war from the current directory in to the `dropins` directory.
 
 2. Build an image tagged `app` using the current directory as context using the command:
 
@@ -76,24 +77,24 @@ The approach from the previous section means that you have neatly packaged a sin
     ```bash
     $ docker run -v /config --name=app app true
     ```
-This time, the `-v` flag is being use to export a volume from the server. The last parameter of `true` is the command that the container will run. This will exit immediately leaving you with a stopped container that exposes the server configuration containing the application.
-Note: You have just reused the existing image for convenience here. You are not going to use the Liberty server runtime in it and could equally have used an image created from `ubuntu`.
+    This time, the `-v` flag is being use to export a volume from the server. The last parameter of `true` is the command that the container will run. This will exit immediately leaving you with a stopped container that exposes the server configuration containing the application.
+    Note: You have just reused the existing image for convenience here. You are not going to use the Liberty server runtime in it and could equally have used an image created from `ubuntu`.
 
 2. Now run the following command to start a Liberty container:
 
     ```bash
     $ docker run --volumes-from app -d -p 80:9080 websphere-liberty
     ```
-The key option this time is the `--volumes-from` flag which indicates that the volumes exported by the container `app` should be mounted on this container.
+    The key option this time is the `--volumes-from` flag which indicates that the volumes exported by the container `app` should be mounted on this container.
 
 3. Once again, use the following command to watch the server start (where the `docker ps -lq` command returns the ID of the last container run):
 
     ```bash
     $ docker logs --tail=all -f $(docker ps -lq)
     ```
-You should see log entries indicating that the application has been started.
+    You should see log entries indicating that the application has been started.
 
-4. Repeat step 4 in ## Mounting an application on the image to find the IP address of the server
+4. Repeat step 4 in `Mounting an application on the image` to find the IP address of the server
 
 5. View the running application by opening a web browser at this IP address followed by '/app'
 
