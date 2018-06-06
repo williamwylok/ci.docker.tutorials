@@ -38,7 +38,7 @@ The first method is simply to mount an application or directory from the host wh
 
     The section under ports will provide the IP Address (0.0.0.0 in this scenario.)
 
-5. View the running application by opening a web browser at this IP address followed by '/app'.
+5. View the running application by opening a web browser to either localhost, if running on your local machine, or the IP address of your VM, if running on a remote VM, followed by '/app'.
 
 6. Clean up the server with the following commands:
 
