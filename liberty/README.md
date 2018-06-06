@@ -43,26 +43,15 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
     $ docker logs --tail=all -f wlp
     ```
     Once the server is ready to run, type `Ctrl-C` to return to the command prompt.
-9. Run the following Docker Machine command to identify the IP address allocated to the current active virtual machine:
-
-    ```bash
-    $ docker-machine ip $(docker-machine active)
-    ```
-10. Open a web browser and enter this IP address to view the Liberty welcome page.
-11. Return to the terminal and enter the following command to see the processes running in the container:
+9. Open a web browser and enter the IP address of the machine running the container to view the Liberty welcome page.
+    1. This will be `localhost` if you are running on your laptop, or, if you are running on a VM, the IP address of the VM.
+10. Return to the terminal and enter the following command to see the processes running in the container:
 
     ```bash
     $ docker top wlp
     ```
     You will see the `server` script and the child Java process.
-12. If you execute the following commands, you can see that these processes can also be seen at the level of the Docker host. They are normal Linux processes whose visibility of the rest of the host are constrained by the use of Linux namespaces.
-
-    ```bash
-    $ docker-machine ssh
-    $ ps aux | grep wlp
-    $ exit
-    ```
-13. Docker permits us to run other processes inside the namespaces of an existing container. This is primarily used for diagnostic purposes.
+11. Docker permits us to run other processes inside the namespaces of an existing container. This is primarily used for diagnostic purposes.
 
     1. For example, type the following command to start an interactive session inside the running container:
         ```bash
@@ -85,7 +74,7 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
         ```bash
         $ exit
         ```
-14. It is also possible to copy files out of the container.
+12. It is also possible to copy files out of the container.
 
     1. For example type the following command to copy the messages.log file from the container `wlp` to the current directory:
 
@@ -98,7 +87,7 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
         ```bash
         $ cat messages.log
         ```
-15. Finally, run the following commands to clear up the container:
+13. Finally, run the following commands to clear up the container:
 
     ```bash
     $ docker stop wlp
