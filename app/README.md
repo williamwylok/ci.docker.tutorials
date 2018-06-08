@@ -12,7 +12,7 @@ The first method is simply to mount an application or directory from the host wh
 2. Use the following command to run a container with WebSphere Liberty:
 
     ```bash
-    $ docker run -d -p 80:9080 --name=app -v ServletApp.war:/config/dropins/app.war websphere-liberty
+    $ docker run -d -p 80:9080 --name=app -v $PWD/ServletApp.war:/config/dropins/app.war websphere-liberty
     ```
     The important part of the command is the `-v` option which indicates that the ServletApp.war from the directory on the Docker host should be mounted in to the `dropins` directory of the Liberty server configuration. **You need to specify the full pathname to ServletApp.war on your host machine.**
 
