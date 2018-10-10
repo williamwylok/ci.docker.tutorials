@@ -87,59 +87,19 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
         ```bash
         $ cat messages.log
         ```
-13. Finally, run the following commands to clear up the container:
+        
+13. Using `docker inspect wlp` reveals lots more interesting information about the running container. The command accepts filters in the golang template format so, for example, it is possible to retrieve just the IP address for the container using:
+
+    ```bash
+    $ docker inspect --format '{{ .NetworkSettings.IPAddress }}' wlp
+    ```
+    
+14. Finally, run the following commands to clear up the container:
 
     ```bash
     $ docker stop wlp
     $ docker rm wlp
-    ```
 
-## Handling multiple containers
-Explicitly setting ports and names is fine if you only have a single container but what if you are trying to run multiple instances of an image?
-
-1. Type the following command to run the Liberty image again:
-
-    ```bash
-    $ C=$(docker run -d -P websphere-liberty)
-    ```
-    This time you have specified the `-P` flag to indicate that Docker should automatically select ports on the host to map those exposed by the image to. You have also saved the identifier for the new container in the variable `$C`.
-2. Run the following command to see the ports on the host that Docker has mapped 9080 and 9443 to:
-
-    ```bash
-    $ docker ps
-    ```
-3. The `docker port` command can be used to retrieve the mapping for a specific port. For example, you can retrieve the Liberty welcome page for this container by typing the command:
-
-    ```bash
-    $ curl $(docker port $C 9080)
-    ```
-4. Using `docker inspect $C` reveals lots more interesting information about the running container. The command accepts filters in the golang template format so, for example, it is possible to retrieve just the IP address for the container using:
-
-    ```bash
-    $ docker inspect --format '{{ .NetworkSettings.IPAddress }}' $C
-    ```
-5. You can now run another instance of the container using the same command and Docker will allocate different ports:
-
-    ```bash
-    $ D=$(docker run -d -P websphere-liberty)
-    ```
-6. Execute the following command to confirm that you now have two containers running:
-
-    ```bash
-    $ docker ps
-    ```
-7. Run the following command to see a live stream of stats from the running containers:
-
-    ```bash
-    $ docker stats $C $D
-    ```
-    Note that, having not expressed any constraints, each container has the full memory allocated to virtual machine available to it.
-8. Enter `Ctrl-C` to terminate the stats stream.
-9. Clean up the containers with the following commands:
-
-    ```bash
-    $ docker kill $C $D
-    $ docker rm $(docker ps -aq)
     ```
 
 ## Congratulations
