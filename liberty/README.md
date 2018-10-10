@@ -40,7 +40,7 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
 8. Use the following command to follow the logs of the container as it starts up:
 
     ```bash
-    $ docker logs --tail=all -f wlp
+    $ docker logs -f wlp
     ```
     Once the server is ready to run, type `Ctrl-C` to return to the command prompt.
 9. Open a web browser and enter the IP address of the machine running the container to view the Liberty welcome page.
