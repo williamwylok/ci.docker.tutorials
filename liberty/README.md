@@ -45,7 +45,8 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
     Once the server is ready to run, type `Ctrl-C` to return to the command prompt.
 9. Open a web browser and enter the IP address of the machine running the container to view the Liberty welcome page.
     1. If you are using docker-machine on your desktop (Mac or Windows 7), then run docker-machine ip default to get the docker machine ip
-       open browser to http://<docker-machine ip>:9080/
+    2. Open browser to 'http://<docker-machine ip>:9080/'
+    
 10. Return to the terminal and enter the following command to see the processes running in the container:
 
     ```bash
