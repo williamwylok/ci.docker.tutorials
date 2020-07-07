@@ -31,10 +31,10 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
     ```
 6. The server isn't much use though as we didn't expose any ports to access it. Type `Ctrl-C` to stop the server. (If you failed to specify the `-i -t` options then you will have to kill the process from another terminal.)
 
-7. This time map the port 9080 from the container to port 80 on the host virtual machine:
+7. This time map the port 9080 from the container to port 9080 on the host virtual machine:
 
     ```bash
-    $ docker run -d -p 80:9080 --name wlp websphere-liberty
+    $ docker run -d -p 9080:9080 --name wlp websphere-liberty
     ```
    Note that this time you have specified the `-d` option to run the container in the background, and we have given it a name so that we can subsequently refer to it by this name rather than using the generated name or id.
 8. Use the following command to follow the logs of the container as it starts up:
@@ -44,7 +44,8 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
     ```
     Once the server is ready to run, type `Ctrl-C` to return to the command prompt.
 9. Open a web browser and enter the IP address of the machine running the container to view the Liberty welcome page.
-    1. This will be `localhost` if you are running on your laptop, or, if you are running on a VM, the IP address of the VM.
+    1. If you are using docker-machine on your desktop (Mac or Windows 7), then run docker-machine ip default to get the docker machine ip
+       open browser to http://<docker-machine ip>:9080/
 10. Return to the terminal and enter the following command to see the processes running in the container:
 
     ```bash
