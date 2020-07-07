@@ -49,7 +49,7 @@ In this tutorial you'll run your first Liberty server under Docker using the `we
     ```bash
     $ docker-machine ip default
     ```
-    2. Open browser to 'http://<docker-machine ip>:9080/'
+    2. Open browser to 'http://docker-machine_ip:9080/'
     
 10. Return to the terminal and enter the following command to see the processes running in the container:
 
