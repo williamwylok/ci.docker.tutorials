@@ -1,3 +1,3 @@
 FROM websphere-liberty
-RUN installUtility install --acceptLicense mongodb-2.0
+RUN installUtility install --acceptLicense defaultServer
 COPY mongoDBSample /config
